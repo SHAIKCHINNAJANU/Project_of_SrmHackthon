@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hospital Management System</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Styles -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div id="app">
+        <!-- Login Screen -->
+        <div id="login-screen" class="screen active">
+            <div class="login-container">
+                <div class="login-card glass-panel">
+                    <div class="logo-area">
+                        <i class="fa-solid fa-heart-pulse logo-icon"></i>
+                        <h1>MediCare</h1>
+                        <p>Hospital Management System</p>
+                    </div>
+                    <form id="login-form">
+                        <div class="form-group">
+                            <label for="username">Username</label>
+                            <div class="input-wrapper">
+                                <i class="fa-regular fa-user"></i>
+                                <input type="text" id="username" placeholder="Enter username" required>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <label for="password">Password</label>
+                            <div class="input-wrapper">
+                                <i class="fa-solid fa-lock"></i>
+                                <input type="password" id="password" placeholder="Enter password" required>
+                            </div>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">
+                            Login <i class="fa-solid fa-arrow-right"></i>
+                        </button>
+                    </form>
+                    <div class="login-footer">
+                        <p>Default: admin / admin123</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Layout -->
+        <div id="dashboard-layout" class="screen">
+            <aside class="sidebar glass-panel">
+                <div class="sidebar-header">
+                    <i class="fa-solid fa-heart-pulse logo-icon"></i>
+                    <h2>MediCare</h2>
+                </div>
+                <nav class="sidebar-nav">
+                    <ul>
+                        <li class="nav-item active" data-view="dashboard">
+                            <i class="fa-solid fa-chart-pie"></i>
+                            <span>Dashboard</span>
+                        </li>
+                        <li class="nav-item" data-view="patients">
+                            <i class="fa-solid fa-users"></i>
+                            <span>Patients</span>
+                        </li>
+                        <li class="nav-item" data-view="doctors">
+                            <i class="fa-solid fa-user-doctor"></i>
+                            <span>Doctors</span>
+                        </li>
+                        <li class="nav-item" data-view="status">
+                            <i class="fa-solid fa-clipboard-check"></i>
+                            <span>Status</span>
+                        </li>
+                    </ul>
+                </nav>
+                <div class="sidebar-footer">
+                    <div class="user-info">
+                        <div class="avatar">A</div>
+                        <div class="details">
+                            <span class="name">Admin User</span>
+                            <span class="role">Administrator</span>
+                        </div>
+                    </div>
+                    <button id="logout-btn" class="btn-icon" title="Logout">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                    </button>
+                </div>
+            </aside>
+
+            <main class="main-content">
+                <header class="top-bar glass-panel">
+                    <div class="page-title">
+                        <h2 id="current-page-title">Dashboard</h2>
+                    </div>
+                    <div class="actions">
+                        <button class="btn btn-icon"><i class="fa-regular fa-bell"></i></button>
+                        <button class="btn btn-icon"><i class="fa-solid fa-gear"></i></button>
+                    </div>
+                </header>
+
+                <div id="content-area">
+                    <!-- Dashboard View -->
+                    <div id="view-dashboard" class="view active">
+                        <div class="stats-grid">
+                            <div class="stat-card glass-panel">
+                                <div class="icon-box blue"><i class="fa-solid fa-users"></i></div>
+                                <div class="stat-info">
+                                    <h3>Total Patients</h3>
+                                    <p class="stat-value" id="stat-patients">0</p>
+                                </div>
+                            </div>
+                            <div class="stat-card glass-panel">
+                                <div class="icon-box green"><i class="fa-solid fa-user-doctor"></i></div>
+                                <div class="stat-info">
+                                    <h3>Active Doctors</h3>
+                                    <p class="stat-value" id="stat-doctors">0</p>
+                                </div>
+                            </div>
+                            <div class="stat-card glass-panel">
+                                <div class="icon-box purple"><i class="fa-solid fa-calendar-check"></i></div>
+                                <div class="stat-info">
+                                    <h3>Appointments</h3>
+                                    <p class="stat-value" id="stat-appointments">0</p>
+                                </div>
+                            </div>
+                            <div class="stat-card glass-panel">
+                                <div class="icon-box orange"><i class="fa-solid fa-wallet"></i></div>
+                                <div class="stat-info">
+                                    <h3>Earnings</h3>
+                                    <p class="stat-value" id="stat-earnings">$0</p>
+                                </div>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <!-- Patients (Merged) View -->
+                    <div id="view-patients" class="view">
+                        <div class="view-header">
+                            <div class="search-bar glass-panel">
+                                <i class="fa-solid fa-search"></i>
+                                <input type="text" id="patient-search" placeholder="Search...">
+                            </div>
+                            <div class="actions">
+                                <button class="btn btn-primary" onclick="openModal('patient-modal')">
+                                    <i class="fa-solid fa-plus"></i> Add Patient
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- Appointments Section -->
+                        <div class="section-container" style="margin-bottom: 30px;">
+                            <h3 style="margin-bottom: 15px; color: var(--primary);">Appointments</h3>
+                            <div class="glass-panel table-container">
+                                <table class="table">
+                                    <thead>
+                                        <tr>
+                                            <th>ID</th>
+                                            <th>Patient</th>
+                                            <th>Doctor</th>
+                                            <th>Date/Time</th>
+                                            <th>Status</th>
+                                            <th>Actions</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody id="merged-appointment-list"></tbody>
+                                </table>
+                            </div>
+                        </div>
+
+
+                    </div>
+
+                    <!-- Doctors View -->
+                    <div id="view-doctors" class="view">
+                        <div class="view-header">
+                            <div class="search-bar glass-panel">
+                                <i class="fa-solid fa-search"></i>
+                                <input type="text" id="doctor-search" placeholder="Search doctors...">
+                            </div>
+                            <button class="btn btn-primary" onclick="openModal('doctor-modal')">
+                                <i class="fa-solid fa-plus"></i> Add Doctor
+                            </button>
+                        </div>
+                        <div class="cards-grid" id="doctor-list-grid">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <!-- Status View (Confirmed Appointments) -->
+                    <div id="view-status" class="view">
+                        <div class="view-header">
+                            <h3>Confirmed Appointments</h3>
+                            <!-- Could add filter here if needed -->
+                        </div>
+                        <div class="glass-panel table-container">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>ID</th>
+                                        <th>Patient</th>
+                                        <th>Doctor</th>
+                                        <th>Date/Time</th>
+                                        <th>Action</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="status-list-body"></tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- Removed Old Appointments View -->
+                </div>
+
+                <!-- Doctor Profile View -->
+                <div id="view-doctor-profile" class="view">
+                    <div class="view-header" style="justify-content: flex-start; gap: 15px;">
+                        <button class="btn btn-outline" onclick="navigateTo('doctors')">
+                            <i class="fa-solid fa-arrow-left"></i>
+                        </button>
+                        <h2>Doctor Profile</h2>
+                    </div>
+                    <div class="profile-card-large glass-panel">
+                        <div class="doc-cover"></div>
+                        <div class="doc-profile-content">
+                            <div class="doc-avatar large" id="dp-avatar">D</div>
+                            <div class="dp-info">
+                                <h1 id="dp-name">Doctor Name</h1>
+                                <p id="dp-spec">Specialization</p>
+                                <div class="dp-tags">
+                                    <span class="badge" id="dp-exp"><i class="fa-solid fa-briefcase"></i> 0 Years</span>
+                                    <span class="badge" id="dp-fee"><i class="fa-solid fa-money-bill"></i> ₹0</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="glass-panel" style="margin-top: 20px;">
+                        <div class="panel-header">
+                            <h3>Assigned Patients</h3>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                        <th>Name</th>
+                                        <th>Disease/Symptoms</th>
+                                        <th>Phone</th>
+                                        <th>Visit Time</th>
+                                        <th>Actions</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="doctor-patient-list">
+                                    <!-- Populated by JS -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Modals -->
+    <div id="patient-modal" class="modal">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h3>Add New Patient</h3>
+                <button class="close-btn" onclick="closeModal('patient-modal')"><i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="patient-form">
+                <input type="hidden" name="id" id="patient-id-hidden">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Full Name</label>
+                        <input type="text" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Age</label>
+                        <input type="number" name="age" min="1" max="150" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <select name="gender" required>
+                            <option value="Male">Male</option>
+                            <option value="Female">Female</option>
+                            <option value="Other">Other</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Blood Group</label>
+                        <select name="blood_group">
+                            <option value="A+">A+</option>
+                            <option value="A-">A-</option>
+                            <option value="B+">B+</option>
+                            <option value="B-">B-</option>
+                            <option value="O+">O+</option>
+                            <option value="O-">O-</option>
+                            <option value="AB+">AB+</option>
+                            <option value="AB-">AB-</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Phone</label>
+                        <input type="tel" name="phone" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Address</label>
+                        <input type="text" name="address">
+                    </div>
+                    <div class="form-group">
+                        <label>Admitting Doctor</label>
+                        <select name="doctor_id" id="patient-doctor-select">
+                            <option value="">Select Doctor</option>
+                            <!-- Populated by JS -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Symptoms / Disease</label>
+                        <input type="text" name="symptoms" placeholder="e.g. Fever, Flu">
+                    </div>
+                    <div class="form-group">
+                        <label>Appointment Date</label>
+                        <input type="date" name="appt_date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Appointment Time</label>
+                        <input type="time" name="appt_time" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="closeModal('patient-modal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Patient</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="doctor-modal" class="modal">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h3>Add New Doctor</h3>
+                <button class="close-btn" onclick="closeModal('doctor-modal')"><i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="doctor-form">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Name</label>
+                        <input type="text" name="name" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Specialization</label>
+                        <select name="specialization" required>
+                            <option value="General">General</option>
+                            <option value="Cardiology">Cardiology</option>
+                            <option value="Neurology">Neurology</option>
+                            <option value="Orthopedics">Orthopedics</option>
+                            <option value="Pediatrics">Pediatrics</option>
+                            <option value="Dermatology">Dermatology</option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Consultation Fee (₹)</label>
+                        <input type="number" name="fee" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Experience (Years)</label>
+                        <input type="number" name="experience" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Gender</label>
+                        <div class="radio-group">
+                            <label><input type="radio" name="gender" value="Male" required> Male</label>
+                            <label><input type="radio" name="gender" value="Female"> Female</label>
+                        </div>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Address</label>
+                        <input type="text" name="address" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline" onclick="closeModal('doctor-modal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Save Doctor</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="appointment-modal" class="modal">
+        <div class="modal-content glass-panel">
+            <div class="modal-header">
+                <h3>Book Appointment</h3>
+                <button class="close-btn" onclick="closeModal('appointment-modal')"><i
+                        class="fa-solid fa-xmark"></i></button>
+            </div>
+            <form id="appointment-form">
+                <input type="hidden" name="id" id="appt-id-hidden">
+                <div class="form-grid">
+                    <div class="form-group">
+                        <label>Patient</label>
+                        <select name="patient_id" id="appt-patient-select" required>
+                            <!-- Populated -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Doctor</label>
+                        <select name="doctor_id" id="appt-doctor-select" required>
+                            <!-- Populated -->
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>Date</label>
+                        <input type="date" name="date" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Time</label>
+                        <input type="time" name="time" required>
+                    </div>
+                    <div class="form-group full-width">
+                        <label>Reason</label>
+                        <textarea name="reason" rows="2"></textarea>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-outline"
+                        onclick="closeModal('appointment-modal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary">Book Appointment</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
